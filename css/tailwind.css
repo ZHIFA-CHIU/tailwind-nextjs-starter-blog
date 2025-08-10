@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
 @plugin "@tailwindcss/forms";
 @plugin '@tailwindcss/typography';
 @source '../node_modules/pliny';
@@ -6,35 +7,44 @@
 
 /* Core theme configuration */
 @theme {
-  /* Font families */
-  --font-sans: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  /* Font families - Apple Notes inspired */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, ui-sans-serif,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
-  /* Colors */
-  /* Copied from https://tailwindcss.com/docs/theme#default-theme-variable-reference */
-  --color-primary-50: oklch(0.971 0.014 343.198);
-  --color-primary-100: oklch(0.948 0.028 342.258);
-  --color-primary-200: oklch(0.899 0.061 343.231);
-  --color-primary-300: oklch(0.823 0.12 346.018);
-  --color-primary-400: oklch(0.718 0.202 349.761);
-  --color-primary-500: oklch(0.656 0.241 354.308);
-  --color-primary-600: oklch(0.592 0.249 0.584);
-  --color-primary-700: oklch(0.525 0.223 3.958);
-  --color-primary-800: oklch(0.459 0.187 3.815);
-  --color-primary-900: oklch(0.408 0.153 2.432);
-  --color-primary-950: oklch(0.284 0.109 3.907);
+  /* Font weights for Apple Notes feel */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
 
-  --color-gray-50: oklch(0.985 0.002 247.839);
-  --color-gray-100: oklch(0.967 0.003 264.542);
-  --color-gray-200: oklch(0.928 0.006 264.531);
-  --color-gray-300: oklch(0.872 0.01 258.338);
-  --color-gray-400: oklch(0.707 0.022 261.325);
-  --color-gray-500: oklch(0.551 0.027 264.364);
-  --color-gray-600: oklch(0.446 0.03 256.802);
-  --color-gray-700: oklch(0.373 0.034 259.733);
-  --color-gray-800: oklch(0.278 0.033 256.848);
-  --color-gray-900: oklch(0.21 0.034 264.665);
-  --color-gray-950: oklch(0.13 0.028 261.692);
+  /* Colors - Apple Notes Style */
+  /* Warm amber/orange primary colors inspired by Apple Notes */
+  --color-primary-50: oklch(0.976 0.015 85);
+  --color-primary-100: oklch(0.952 0.032 83.5);
+  --color-primary-200: oklch(0.905 0.065 82);
+  --color-primary-300: oklch(0.835 0.105 80.5);
+  --color-primary-400: oklch(0.742 0.152 79);
+  --color-primary-500: oklch(0.668 0.185 77.5);
+  --color-primary-600: oklch(0.595 0.195 76);
+  --color-primary-700: oklch(0.522 0.175 74.5);
+  --color-primary-800: oklch(0.449 0.145 73);
+  --color-primary-900: oklch(0.376 0.115 71.5);
+  --color-primary-950: oklch(0.255 0.085 70);
+
+  /* Warm neutral grays with cream undertones */
+  --color-gray-50: oklch(0.985 0.008 75);
+  --color-gray-100: oklch(0.972 0.012 70);
+  --color-gray-200: oklch(0.942 0.018 65);
+  --color-gray-300: oklch(0.895 0.025 60);
+  --color-gray-400: oklch(0.735 0.035 55);
+  --color-gray-500: oklch(0.575 0.032 50);
+  --color-gray-600: oklch(0.465 0.028 45);
+  --color-gray-700: oklch(0.385 0.025 40);
+  --color-gray-800: oklch(0.295 0.022 35);
+  --color-gray-900: oklch(0.225 0.018 30);
+  --color-gray-950: oklch(0.145 0.015 25);
 
   /* Line heights */
   --line-height-11: 2.75rem;
@@ -65,6 +75,53 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  /* Apple Notes inspired body background and typography */
+  body {
+    background-color: oklch(0.985 0.008 75); /* Warm cream background */
+    color: oklch(0.225 0.018 30); /* Warm dark text */
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em; /* Slightly tighter letter spacing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Typography hierarchy inspired by Apple Notes */
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+  }
+
+  h2 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+
+  /* Dark mode with warm tones */
+  .dark body {
+    background-color: oklch(0.145 0.015 25); /* Warm dark background */
+    color: oklch(0.95 0.01 60); /* Very bright body text for maximum contrast */
+  }
+
   a,
   button {
     outline-color: var(--color-primary-500);
@@ -80,61 +137,205 @@
 
 @layer utilities {
   .prose {
+    font-family: var(--font-sans);
+
     & a {
-      color: var(--color-primary-500);
+      color: var(--color-primary-600); /* Warmer orange links */
+      font-weight: 500; /* Medium weight for links */
       &:hover {
-        color: var(--color-primary-600);
+        color: var(--color-primary-700);
       }
       & code {
-        color: var(--color-primary-400);
+        color: var(--color-primary-500);
+        font-weight: 500;
       }
     }
     & :where(h1, h2) {
       font-weight: 700;
-      letter-spacing: var(--tracking-tight);
+      letter-spacing: -0.025em; /* Tighter spacing for large headings */
+      color: oklch(0.225 0.018 30); /* Warm dark headings */
     }
     & h3 {
       font-weight: 600;
+      letter-spacing: -0.015em;
+      color: oklch(0.295 0.022 35); /* Slightly lighter warm tone */
+    }
+    & h4,
+    & h5,
+    & h6 {
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: oklch(0.295 0.022 35);
     }
     & :where(code):not(pre code) {
-      color: var(--color-indigo-500);
+      color: oklch(0.522 0.175 74.5); /* Warm orange code */
+      background-color: oklch(0.972 0.012 70); /* Very light warm background */
+      font-weight: 500;
+      font-size: 0.9em;
+      padding: 0.125rem 0.25rem;
+      border-radius: 0.25rem;
+    }
+    & p {
+      color: oklch(0.295 0.022 35); /* Warm paragraph text */
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: -0.01em;
+    }
+    & blockquote {
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      border-left-color: var(--color-primary-300);
+    }
+    & strong {
+      font-weight: 600; /* Apple Notes uses medium-bold for emphasis */
+      color: oklch(0.225 0.018 30);
     }
   }
 
   .prose-invert {
+    color: oklch(0.9 0.01 55) !important; /* Force bright text color */
+
     & a {
-      color: var(--color-primary-500);
+      color: var(--color-primary-300) !important; /* Even brighter orange for dark mode */
+      font-weight: 500;
       &:hover {
-        color: var(--color-primary-400);
+        color: var(--color-primary-200) !important;
       }
       & code {
-        color: var(--color-primary-400);
+        color: var(--color-primary-300) !important;
+        font-weight: 500;
       }
     }
     & :where(h1, h2, h3, h4, h5, h6) {
-      color: var(--color-gray-100);
+      color: oklch(0.95 0.01 60) !important; /* Nearly white headings for maximum contrast */
+    }
+    & :where(code):not(pre code) {
+      color: var(--color-primary-200) !important; /* Very bright code text */
+      background-color: oklch(0.2 0.01 30) !important; /* Lighter code background */
+      font-weight: 500;
+    }
+    & p {
+      color: oklch(0.9 0.01 55) !important; /* Much brighter paragraph text - almost white */
+    }
+    & strong {
+      font-weight: 600;
+      color: oklch(0.95 0.01 60) !important; /* Very bright strong text */
+    }
+    & blockquote {
+      border-left-color: var(--color-primary-400);
+      color: oklch(0.88 0.015 55) !important; /* Bright blockquote text */
+    }
+    & li {
+      color: oklch(0.9 0.01 55) !important; /* Very bright list items */
+    }
+    & :where(th, td) {
+      color: oklch(0.9 0.01 55) !important; /* Very bright table text */
+    }
+    & em {
+      color: oklch(0.88 0.015 55) !important; /* Bright italic text */
+    }
+    & :where(ol, ul) {
+      color: oklch(0.9 0.01 55) !important; /* Bright list text */
+    }
+    & span {
+      color: oklch(0.9 0.01 55) !important; /* Bright span text */
+    }
+    & div {
+      color: oklch(0.9 0.01 55) !important; /* Bright div text */
+    }
+    /* Target all text content in MDX */
+    & * {
+      color: oklch(0.9 0.01 55) !important; /* Force bright color on all elements */
+    }
+    /* Re-apply specific colors for headings and links after the global rule */
+    & :where(h1, h2, h3, h4, h5, h6) {
+      color: oklch(0.95 0.01 60) !important;
+    }
+    & a {
+      color: var(--color-primary-300) !important;
     }
   }
 }
 
+/* Specific dark mode fixes for MDX content */
+.dark .prose {
+  color: #f0f0f0 !important;
+}
+
+.dark .prose * {
+  color: #f0f0f0 !important;
+}
+
+.dark .prose p {
+  color: #f0f0f0 !important;
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4,
+.dark .prose h5,
+.dark .prose h6 {
+  color: #ffffff !important;
+}
+
+.dark .prose a {
+  color: #fbbf24 !important;
+}
+
+.dark .prose strong {
+  color: #ffffff !important;
+}
+
+.dark .prose li {
+  color: #f0f0f0 !important;
+}
+
+.dark .prose blockquote {
+  color: #e5e5e5 !important;
+}
+
+.dark .prose code {
+  color: #fbbf24 !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .prose pre {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.dark .prose table th,
+.dark .prose table td {
+  color: #f0f0f0 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
 .task-list-item::before {
-  @apply hidden;
+  display: none;
 }
 
 .task-list-item {
-  @apply list-none;
+  list-style: none;
 }
 
 .footnotes {
-  @apply mt-12 border-t border-gray-200 pt-8 dark:border-gray-700;
+  margin-top: 3rem;
+  border-top: 1px solid oklch(0.942 0.018 65);
+  padding-top: 2rem;
+}
+
+.dark .footnotes {
+  border-top-color: oklch(0.385 0.025 40);
 }
 
 .data-footnote-backref {
-  @apply no-underline;
+  text-decoration: none;
 }
 
 .csl-entry {
-  @apply my-5;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -172,4 +373,120 @@ input:-webkit-autofill:focus {
 .linkicon {
   display: inline-block;
   vertical-align: middle;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

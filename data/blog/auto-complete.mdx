@@ -1,0 +1,62 @@
+---
+title: 'Auto Complete'
+date: '2025-08-10'
+tags: ['system design', 'frontend', 'react', 'typescript']
+draft: true
+summary: AutoComplete
+---
+
+# Autocomplete
+
+<AutoComplete />
+
+## Question
+
+Create an autocomplete UI component where users can type a search term into a text field, view matching results in a dropdown list, and select an item from the list.
+
+- [Google search bar](https://www.google.com)
+- [Tradingview stock search](https://www.tradingview.com/)
+
+A backend API is available that returns a list of results corresponding to the search query.
+
+## Requirements
+
+1. Should only returns text results.
+2. Component will be used in browser.
+3. fuzzy search.
+
+## Architecture
+
+- Input
+  - Text field for user input.
+- Dropdown list
+  - Displays matching results based on user input.
+  - Should be scrollable if there are many results.
+- Cache
+  - Cache results to avoid unnecessary API calls.
+- Controller
+  - Passes user input and results between components.
+  - Fetches results from the server if the cache is empty for a particular query.
+
+## Data model
+
+- Controller
+- Cache
+
+## API
+
+- Number of results to return.
+- API URL.
+- Event listeners.
+- Customized rendering
+
+## Perfomance
+
+- Debounce input to avoid excessive API calls.
+- Cache results to minimize network requests.
+- Add loading state to indicate when results are being fetched.
+
+## Possible possible enhancements
+
+- Purging cache after a certain time.
+- Using virtualization for large result sets.
