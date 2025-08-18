@@ -16,6 +16,25 @@
   @apply mt-0 rounded-t-none;
 }
 
+/* Code block styles - ensure they override prose styles */
+.prose pre[class*='language-'],
+pre[class*='language-'] {
+  @apply rounded-lg bg-gray-900 p-4 text-sm leading-relaxed text-gray-100 dark:bg-gray-950;
+  overflow-x: auto;
+}
+
+.prose code[class*='language-'],
+code[class*='language-'] {
+  @apply text-gray-100;
+  background: transparent !important;
+}
+
+/* Ensure prose doesn't override token colors */
+.prose pre code,
+.prose code {
+  color: inherit !important;
+}
+
 /* Code block styles */
 .code-highlight {
   @apply float-left min-w-full;
@@ -50,50 +69,82 @@
  * Ported by Sara vieria [@SaraVieira]
  * Added by Souvik Mandal [@SimpleIndian]
  */
+/* Ensure token colors override prose styles */
+.prose .token.comment,
+.prose .token.prolog,
+.prose .token.cdata,
 .token.comment,
 .token.prolog,
 .token.cdata {
-  color: rgb(99, 119, 119);
+  color: rgb(99, 119, 119) !important;
   font-style: italic;
 }
 
+.prose .token.punctuation,
 .token.punctuation {
-  color: rgb(199, 146, 234);
+  color: rgb(199, 146, 234) !important;
 }
 
+.prose .namespace,
 .namespace {
-  color: rgb(178, 204, 214);
+  color: rgb(178, 204, 214) !important;
 }
 
+.prose .token.deleted,
 .token.deleted {
-  color: rgba(239, 83, 80, 0.56);
+  color: rgba(239, 83, 80, 0.56) !important;
   font-style: italic;
 }
 
+.prose .token.symbol,
+.prose .token.property,
 .token.symbol,
 .token.property {
-  color: rgb(128, 203, 196);
+  color: rgb(128, 203, 196) !important;
 }
 
+.prose .token.tag,
+.prose .token.operator,
+.prose .token.keyword,
 .token.tag,
 .token.operator,
 .token.keyword {
-  color: rgb(127, 219, 202);
+  color: rgb(127, 219, 202) !important;
+  font-weight: 600;
 }
 
+.prose .token.boolean,
 .token.boolean {
-  color: rgb(255, 88, 116);
+  color: rgb(255, 88, 116) !important;
+  font-weight: 600;
 }
 
+.prose .token.number,
 .token.number {
-  color: rgb(247, 140, 108);
+  color: rgb(247, 140, 108) !important;
+  font-weight: 500;
 }
 
+.prose .token.constant,
+.prose .token.function,
+.prose .token.builtin,
+.prose .token.char,
 .token.constant,
 .token.function,
 .token.builtin,
 .token.char {
-  color: rgb(130, 170, 255);
+  color: rgb(130, 170, 255) !important;
+  font-weight: 500;
+}
+
+.prose .token.string,
+.prose .token.url,
+.prose .token.attr-value,
+.token.string,
+.token.url,
+.token.attr-value {
+  color: rgb(195, 232, 141) !important;
+  font-weight: 400;
 }
 
 .token.selector,

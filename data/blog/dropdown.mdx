@@ -1,0 +1,317 @@
+---
+title: 'Dropdown'
+date: '2025-08-15'
+tags: ['system design', 'frontend', 'react', 'typescript']
+draft: false
+summary: 'A production-ready React dropdown component built with TypeScript, Floating UI, and compound components pattern. Features controlled/uncontrolled modes, Apple-style design, accessibility, and customizable positioning.'
+---
+
+## Showcase
+
+<SystemDesignDropdownDemo />
+<br />
+<SystemDesignUncontrolledDropdownDemo />
+
+## Requirements
+
+- Only one dropdown should be able to be opened at the same time.
+- There is no maximum number of items in the dropdown.
+- Users should be able to customize the dropdown.
+- Dropdown should be accessible.
+- Dropdown should be able to use in mobile devices and desktop devices.
+
+## High-Level Design
+
+```tsx
+<Dropdown>
+  <Dropdown.Button>
+    <Button>Open Dropdown</Button>
+  </Dropdown.Button>
+  <Dropdown.Items>
+    <Dropdown.Item onClick={() => alert('Item 1 clicked')}>Item 1</Dropdown.Item>
+    <Dropdown.Item onClick={() => alert('Item 2 clicked')}>Item 2</Dropdown.Item>
+    <Dropdown.Item onClick={() => alert('Item 3 clicked')}>Item 3</Dropdown.Item>
+  </Dropdown.Items>
+</Dropdown>
+```
+
+- **Dropdown** is the main component that wraps everything.
+- **Dropdown.Button** is the button that opens the dropdown.
+- **Dropdown.Items** is the container for the dropdown items.
+- **Dropdown.Item** is the individual item in the dropdown.
+
+## Component API
+
+### Dropdown
+
+```tsx
+type DropdownProps = {
+  children: ReactNode
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  className?: string
+  as?: ElementType
+  position?: 'top' | 'bottom' | 'left' | 'right'
+}
+```
+
+### Dropdown.Button
+
+```tsx
+type DropdownButtonProps = {
+  children: ReactNode
+  className?: string
+  as?: ElementType
+  onClick?: () => void
+}
+```
+
+### Dropdown.Items
+
+```tsx
+type DropdownItemsProps = {
+  children: ReactNode
+  className?: string
+  as?: ElementType
+}
+```
+
+### Dropdown.Item
+
+```tsx
+type DropdownItemProps = {
+  children: ReactNode | ((active?: boolean) => ReactNode)
+  className?: string
+  onClick?: () => void
+  as?: ElementType
+}
+```
+
+### Customization
+
+- The dropdown can be customized using Tailwind CSS classes.
+- The **className** prop can be used to add custom styles.
+- The **as** prop can be used to change the underlying HTML element.
+
+## Optiomization
+
+- Support four different positions: top, bottom, left, right.
+- Use **useFloating** to handle positioning and visibility.
+- Automatically close the dropdown when clicking outside.
+- Automattically flip the dropdown if it goes out of bounds.
+- Add aria attributes for accessibility.
+- Use compound components for better organization and readability.
+- Use render Props pattern to expose active item state and handle mouse events.
+- Use handleClickOutside to close the dropdown when clicking outside.
+
+## Implementation
+
+```tsx
+type DropdownProps = {
+  children: ReactNode
+  open?: boolean
+  defaultOpen?: boolean
+  onOpenChange?: (open: boolean) => void
+  className?: string
+  as?: ElementType
+  position?: 'top' | 'bottom' | 'left' | 'right'
+}
+
+type DropdownContextType = {
+  isOpen: boolean
+  handleOnOpenChange: (open: boolean) => void
+  refs: {
+    reference: RefObject<ReferenceType | null>
+    floating: RefObject<HTMLElement | null>
+    setReference: (node: ReferenceType | null) => void
+    setFloating: (node: HTMLElement | null) => void
+  }
+  floatingStyles: CSSProperties
+  activeItem: string
+  setActiveItem: (item: string) => void
+}
+
+const DropdownContext = createContext<DropdownContextType>(null as unknown as DropdownContextType)
+
+const Dropdown = ({
+  children,
+  as: Component = 'div',
+  className,
+  defaultOpen = false,
+  onOpenChange,
+  open,
+  position = 'bottom',
+}: DropdownProps) => {
+  const isControlled = open !== undefined
+  const [internalOpen, setInternalOpen] = useState(defaultOpen)
+  const [activeItem, setActiveItem] = useState('')
+  const { refs, floatingStyles } = useFloating({
+    placement: position,
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(8), // Add 8px gap between button and dropdown
+      flip(), // Flip to opposite side if no space
+      shift({ padding: 8 }), // Shift to stay in viewport
+    ],
+  })
+
+  const isOpen = isControlled ? open : internalOpen
+
+  const handleOnOpenChange = useCallback(
+    (open: boolean) => {
+      if (isControlled && onOpenChange) {
+        onOpenChange(open)
+      } else {
+        setInternalOpen(open)
+      }
+    },
+    [isControlled, onOpenChange]
+  )
+
+  useEffect(() => {
+    if (isOpen !== internalOpen) {
+      setInternalOpen(isOpen)
+    }
+  }, [isOpen, internalOpen])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (refs.domReference.current && !refs.floating.current?.contains(event.target as Node)) {
+        handleOnOpenChange(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [refs, handleOnOpenChange])
+
+  return (
+    <DropdownContext.Provider
+      value={{
+        activeItem,
+        setActiveItem,
+        isOpen,
+        handleOnOpenChange,
+        refs,
+        floatingStyles,
+      }}
+    >
+      <Component className={className}>{children}</Component>
+    </DropdownContext.Provider>
+  )
+}
+
+type DropdownButtonProps = {
+  children: ReactNode
+  className?: string
+  as?: ElementType
+  onClick?: () => void
+}
+
+const DropdownButton = ({
+  children,
+  as: Component = 'button',
+  className,
+  onClick,
+}: DropdownButtonProps) => {
+  const { isOpen, handleOnOpenChange, refs } = use(DropdownContext)
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    }
+    handleOnOpenChange(!isOpen)
+  }
+
+  return (
+    <Component
+      role="button"
+      aria-haspopup="true"
+      aria-expanded={isOpen}
+      className={className}
+      onClick={handleClick}
+      ref={refs.setReference}
+    >
+      {children}
+    </Component>
+  )
+}
+
+type DropdownItemsProps = {
+  children: ReactNode
+  className?: string
+  as?: ElementType
+}
+
+const DropdownItems = ({ children, as: Component = 'ul', className }: DropdownItemsProps) => {
+  const { isOpen, refs, floatingStyles } = use(DropdownContext)
+
+  if (!isOpen) return null
+
+  return (
+    <Component
+      role="menu"
+      ref={refs.setFloating}
+      style={{
+        position: 'absolute',
+        ...floatingStyles,
+      }}
+      className={className}
+    >
+      {children}
+    </Component>
+  )
+}
+
+type DropdownItemProps = {
+  children: ReactNode | ((active?: boolean) => ReactNode)
+  className?: string
+  onClick?: () => void
+  as?: ElementType
+}
+
+const DropdownItem = ({
+  children,
+  className,
+  onClick,
+  as: Component = 'li',
+}: DropdownItemProps) => {
+  const id = useId()
+  const { setActiveItem, handleOnOpenChange, activeItem } = use(DropdownContext)
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick()
+    }
+
+    handleOnOpenChange(false)
+  }
+
+  const onMouseEnter = () => {
+    setActiveItem(id)
+  }
+
+  const onMouseLeave = () => {
+    setActiveItem('')
+  }
+
+  return (
+    <Component
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      id={id}
+      className={className}
+      onClick={handleClick}
+      role="menuitem"
+    >
+      {children instanceof Function ? children(activeItem === id) : children}
+    </Component>
+  )
+}
+
+Dropdown.Button = DropdownButton
+Dropdown.Items = DropdownItems
+Dropdown.Item = DropdownItem
+```
