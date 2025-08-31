@@ -1,0 +1,128 @@
+---
+title: 'Modal'
+date: '2025-08-31'
+tags: ['system design', 'frontend', 'react', 'typescript']
+draft: false
+summary: Modal
+---
+
+## Showcase
+
+<SystemDesignModalDemo />
+
+## Requirements
+
+Create a modal (dialog) component that displays its content in an overlay window above the page.
+
+## High-level design
+
+| Component      | Role                                                           |
+| -------------- | -------------------------------------------------------------- |
+| Modal          | Wrapper component                                              |
+| Modal.Header   | Top section of the modal, which renders title and close button |
+| Modal.Content  | Middle section of the modal, which renders the main content    |
+| Modal.Footer   | Bottom section of the modal                                    |
+| Modal.Backdrop | Visually separates the modal from the rest of the page         |
+
+```tsx
+<Modal>
+  <Modal.Backdrop />
+  <Modal.Header>
+    <Header />
+  </Modal.Header>
+  <Modal.Content>
+    <Content />
+  </Modal.Content>
+  <Modal.Footer>
+    <Footer />
+  </Modal.Footer>
+</Modal>
+```
+
+## API
+
+### General props
+
+| Prop      | Type        | Description        |
+| --------- | ----------- | ------------------ |
+| children  | ReactNode   | Child component    |
+| as        | ElementType | Custom DOM element |
+| className | string      | component style    |
+
+### Modal
+
+| Prop    | Type     | Description                     |
+| ------- | -------- | ------------------------------- |
+| open    | boolean  | determine if a modal is open    |
+| onClose | function | callback when a modal is closed |
+
+## Deep dive
+
+### Scroll lock
+
+When a modal is displayed, disable background scrolling to prevent users from moving the page behind the dialog. This ensures focus stays on the modal and provides a consistent user experience.
+
+```tsx
+useEffect(() => {
+  const originalStyle = document.body.style.overflow
+
+  if (open) {
+    document.body.style.overflow = 'hidden'
+  }
+
+  return () => {
+    document.body.style.overflow = originalStyle
+  }
+}, [open])
+```
+
+### Click outside
+
+Clicking outside the modal will close it.
+
+```tsx
+const onClickOutsideHandler = useCallback(
+  (e: Event) => {
+    if (ref.current && !ref.current.contains(e.target as Node)) {
+      onClose()
+    }
+  },
+  [onClose]
+)
+
+useEffect(() => {
+  if (!open) return
+
+  document.addEventListener('mousedown', onClickOutsideHandler)
+  document.addEventListener('touchstart', onClickOutsideHandler)
+
+  return () => {
+    document.removeEventListener('mousedown', onClickOutsideHandler)
+    document.removeEventListener('touchstart', onClickOutsideHandler)
+  }
+}, [open, onClickOutsideHandler])
+```
+
+## a11y
+
+- role = 'dialog' tells screen reader that this element is a dialog window
+
+- aria-modal='true'
+  - Users must interact with it before returning to the rest of the page.
+  - The page behind should be treated as unavailable until the
+
+* aria-labelledby tells which element's text should be used as the accessible name
+
+* aria-label gives the element an accessible name
+
+* aria-describedby tells screen reader which element provides a longer description for another element
+
+### Focus trap
+
+To make sure users — especially those relying on keyboards or assistive tech — don’t accidentally move focus outside of the modal while it’s open.
+
+[Focus trap react](https://github.com/focus-trap/focus-trap-react)
+
+## Animation
+
+Modal animations can be implemented using an animation library and the compound-component pattern.

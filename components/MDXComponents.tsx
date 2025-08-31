@@ -8,6 +8,7 @@ import TableWrapper from './TableWrapper'
 import AutoComplete from './auto-complete/AutoComplete'
 import SystemDesignDropdownDemo from './SystemDesignDropdownDemo'
 import SystemDesignUncontrolledDropdownDemo from './SystemDesignUncontrolledDropdownDemo'
+import SystemDesignModalDemo from './SystemDesignModalDemo'
 
 export const components: MDXComponents = {
   Image,
@@ -19,4 +20,5 @@ export const components: MDXComponents = {
   AutoComplete,
   SystemDesignDropdownDemo,
   SystemDesignUncontrolledDropdownDemo,
+  SystemDesignModalDemo,
 }
